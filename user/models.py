@@ -49,3 +49,4 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.user_to_sub} подписался на {self.sub_user}"
+
