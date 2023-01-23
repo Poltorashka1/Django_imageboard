@@ -1,0 +1,5 @@
+{% autoescape off %}
+    Привет {{ user.username }},
+    Нажмите на ссылку для подтверждения почты:
+    http://{{ domain }}{% url 'accounts:activate' uid=uid token=token %}
+{% endautoescape %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+{#    <img src="{{ user_form.image.url }}" alt="connect" style="max-height: 300px">#}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        <input type="submit" value="Изменить">
+    </form>
+
+    {#    {% if user_form.errors %}#}
+    {#        <form action="" method="post">#}
+    {#            {% csrf_token %}#}
+    {#            <p>Имя: {{ user_form.username }}</p>#}
+    {#            <p>Почта: {{ user.email }}</p>#}
+    {#            <p>Telegram {{ user_form.telegram }}</p>#}
+    {#            {% for error in user_form.year.errors %}#}
+    {#                <p>Возраст: {{ user_form.year }} Ошибка: {{ error|escape }}</p>#}
+    {#            {% endfor %}#}
+    {#            <p>Пол: {{ user_form.gender }}</p>#}
+    {#            <p><input type="submit" value="Изменить"></p>#}
+    {#        </form>#}
+    {#    {% else %}#}
+    {#        <form action="" method="post">#}
+    {#            {% csrf_token %}#}
+    {#            <p>Имя: {{ user_form.username }}</p>#}
+    {#            <p>Почта: {{ user.email }}</p>#}
+    {#            <p>Telegram {{ user_form.telegram }}</p>#}
+    {#            <p>Возраст: {{ user_form.year }}</p>#}
+    {#            <p>Пол: {{ user_form.gender }}</p>#}
+    {#            <p><input type="submit" value="Изменить"></p>#}
+    {#        </form>#}
+    {#    {% endif %}#}
+{% endblock content %}

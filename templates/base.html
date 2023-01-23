@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock title %}</title>
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+</head>
+<body>
+<div class="topnav">
+    <a href="{% url 'posts:list' %}">Главная</a>
+    {% if user.is_authenticated %}
+        {% if section == 'profile' %}
+            <a href="{% url 'accounts:logout' %}">Выход</a>
+        {% else %}
+            <a href="{% url 'accounts:profile' %}">Профиль</a>
+        {% endif %}
+    {% else %}
+        <a href="{% url 'accounts:register' %}">Регистрация</a>
+        <a href="{% url 'accounts:login' %}">Вход</a>
+    {% endif %}
+    {% if perms.administrator %}
+        <a href="{% url 'administration:all_func' %}">Админка</a>
+    {% endif %}
+</div>
+{#{% if messages %}#}
+{#    {% for message in messages %}#}
+{#        {{ message }}#}
+{#    {% endfor %}#}
+{#{% endif %}#}
+{% block content %}
+
+{% endblock content %}
+</body>
+</html>

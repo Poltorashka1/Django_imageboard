@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Админка{% endblock title %}
+{% block content %}
+    <form action="." method="get">
+        {% csrf_token %}
+        {{ search_form.as_p }}
+        <input type="submit" value="Искать">
+    </form>
+    {% if query is True %}
+        {% for res in result %}
+            <a href="{{ res.get_absolute_url }}">{{ res.name }}</a>
+            <p>{{ res.text }} <a href="{{ res.author.get_absolute_url }}">{{ res.author }}</a></p>
+            <br>
+        {% endfor %}
+        <h3>Конец поиска</h3>
+    {% elif query is False %}
+        <h3>Ничего не найдено</h3>
+    {% endif %}
+
+    <div class="container">
+        {% for post in unpublish %}
+            <div class="post">
+                <h2><a href="#">{{ post.name }}</a></h2>
+                <p>Доска: {{ post.board }}</p>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="connect" style="max-height: 250px"
+                         align="left"><p>{{ post.text }}</p>
+                {% else %}
+                    <p>{{ post.text }}</p>
+                {% endif %}
+                <p>Автор:<a href="{{ post.author.get_absolute_url }}">{{ post.author }}</a></p>
+                Действия:
+                <a href="{% url 'administration:decision' pk=post.pk slug=post.slug action='accept' %}">Опубликовать</a>
+                <a href="{% url 'administration:decision' pk=post.pk slug=post.slug  action='delete' %}">Удалить</a>
+            </div>
+            </div>
+        {% endfor %}
+{% endblock content %}

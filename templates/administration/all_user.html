@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Админка{% endblock title %}
+{% block content %}
+    <form action="." method="get">
+        {% csrf_token %}
+        {{ search_form.as_p }}
+        <input type="submit" value="Искать">
+    </form>
+    {% if query is True %}
+        {% for res in result %}
+            <p><a href="{{ res.get_absolute_url }}">{{ user.username }}</a> - {{ user.email }} -
+                Активность: {{ res.is_active }}</p>
+            <a href="{% url 'administration:deactive_user' username=user.username pk=user.pk action='deactivate' %}">Деактивировать,
+            </a>
+            <a href="{% url 'administration:deactive_user' username=user.username pk=user.pk action='active' %}">Активировать.
+            </a>
+        {% endfor %}
+        <h4>Конец поиска</h4>
+    {% elif query == False %}
+        <h3>Ничего не найдено</h3>
+    {% endif %}
+    {% for user in all_user %}
+        <p><a href="{{ user.get_absolute_url }}">{{ user.username }}</a> - {{ user.email }} -
+            Активность: {{ user.is_active }}</p>
+        <a href="{% url 'administration:deactive_user' username=user.username pk=user.pk action='deactivate' %}">Деактивировать,
+        </a>
+        <a href="{% url 'administration:deactive_user' username=user.username pk=user.pk action='active' %}">Активировать.
+        </a>
+    {% endfor %}
+{% endblock content %}

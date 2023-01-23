@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Админка{% endblock title %}
+{% block content %}
+    <h2><a href="{% url 'administration:check_post' %}">Посты на проверку</a>
+    </h2>    <h2><a href="{% url 'administration:all_post' %}">Все посты</a></h2>
+    <h2><a href="{% url 'administration:check_user' %}">Пользователи</a></h2>
+{% endblock content %}

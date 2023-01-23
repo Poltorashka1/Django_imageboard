@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}{{ detail_post.name }}{% endblock title %}
+{% block content %}
+
+    {# Пост #}
+    <h2>{{ detail_post.name }}</h2>
+    {% if detail_post.image %}
+        <img src="{{ detail_post.image.url }}" alt="connect" style="max-height: 300px">
+    {% endif %}
+    <p>{{ detail_post.text }}</p>
+    <p>Автор: <a href="{{ detail_post.author.get_absolute_url }}">{{ detail_post.author }}</a>,
+
+        {# Лайки #}
+        Лайков: {{ detail_post.like.count }}</p>
+    {% if user in author_like %}
+        <p><a href="{% url 'posts:like' pk=detail_post.pk action='unlike' %}">Убрать лайк</a></p>
+    {% else %}
+        <p><a href="{% url 'posts:like' pk=detail_post.pk action='like' %}">Лайк</a></p>
+    {% endif %}
+
+    {# Редактирование #}
+    {% if perms.administrator %}
+        <a href="{% url 'posts:post_edit' detail_post.slug %}">Редактировать пост?</a>
+    {% endif %}
+    <p>Опубликовано: {{ detail_post.created }}</p>
+    {% if detail_post.updated != detail_post.created %}
+        <p>Отредактировано: {{ detail_post.updated }}</p>
+    {% endif %}
+
+    {# Форма для коментария #}
+    <form action="." method="post" enctype="multipart/form-data">
+        <h3>Оставить комментарий:</h3>
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <input type="submit" value="Комментировать">
+    </form>
+
+    {# Все коментарии #}
+    <h1>{{ all_comment.count }} комментариев:</h1>
+    {% for comment in comments %}
+        <h4>#{{ comment.id }}</h4>
+        {% if comment.image %}
+            <img src="{{ comment.image.url }}" alt="connect" style="max-height: 150px">
+        {% endif %}
+        {{ comment.text|linebreaks }}
+        <p><a href="{{ comment.author.get_absolute_url }}">{{ comment.author }}</a> <a
+                href="{% url 'posts:reply' slug=detail_post.slug pk=detail_post.pk comment_id=comment.id %}">Ответить</a>
+
+            {% if perms.administrator %}
+                <a href="{% url 'administration:delete_comment' pk=comment.pk action='delete' slug=detail_post.slug post_pk=detail_post.pk %}">Удалить
+                    комментарий</a>
+            {% endif %}</p>
+        {% for reply in comment.reply_comment.all %}
+            <h4>Ответ на #{{ comment.id }}</h4>
+            <p>{{ reply.text }}</p>
+            <p><a href="{{ detail_post.author.get_absolute_url }}">{{ detail_post.author }} {% if perms.administrator %}</a>
+                <a href="{% url 'administration:delete_comment' pk=reply.pk action='delete' slug=detail_post.slug post_pk=detail_post.pk %}">Удалить
+                    комментарий</a> {% endif %}</p>
+        {% endfor %}
+    {% endfor %}
+    {% include 'post/pagination.html' with page=comments %}
+
+{% endblock content %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Регистрация:</h1>
+    {#    {% if user_form.errors %}#}
+    {#        <form action="." method="post">#}
+    {#            {% csrf_token %}#}
+    {#            <p>Имя: {{ user_form.username }}</p>#}
+    {#            <p>Почта: {{ user_form.email }}</p>#}
+    {#            <p>Пароль: {{ user_form.password }}</p>#}
+    {#            <p>Повторите пароль: {{ user_form.password2 }}</p>#}
+    {#            <input type="submit" value="Зарегистрироваться">#}
+    {#        </form>#}
+    {#    {% else %}#}
+    {#        <form action="." method="post">#}
+    {#            {% csrf_token %}#}
+    {##}
+    {#            <p>Имя: {{ user_form.username }}</p>#}
+    {#            <p>Почта: {{ user_form.email }}</p>#}
+    {#            <p>Пароль: {{ user_form.password }}</p>#}
+    {#            <p>Повторите пароль: {{ user_form.password2 }}</p>#}
+    {#            <input type="submit" value="Зарегистрироваться">#}
+    {#        </form>#}
+    {#    {% endif %}#}
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for field in user_form %}
+            <p>{{ field.errors }}
+                {{ field.label_tag }} {{ field }}</p>
+        {% endfor %}
+        <input type="submit" value="Зарегистрироваться">
+    </form>
+{% endblock content %}

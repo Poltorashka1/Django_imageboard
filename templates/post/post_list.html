@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ board_name }}
+{% endblock title %}
+{% block content %}
+    {# Вск доски #}
+    <p>
+        Доcки:
+        {% for board in all_board %}
+            <a href="{{ board.get_absolute_url }}">{{ board }}</a>
+        {% endfor %}
+    </p>
+
+    {# Поиск #}
+    <form action="." method="get">
+        {% csrf_token %}
+        {{ search_form.as_p }}
+        <input type="submit" value="Искать">
+    </form>
+    {% if query is True %}
+        {% for res in result %}
+            <a href="{{ res.get_absolute_url }}">{{ res.name }}</a>
+            <p>{{ res.text }} <a href="{{ res.author.get_absolute_url }}">{{ res.author }}</a></p>
+            <br>
+        {% endfor %}
+    {% elif query == False %}
+        <h3>Ничего не найдено</h3>
+    {% endif %}
+
+    {# Добавление поста #}
+    {% if user.is_authenticated %}
+        <p>Привет {{ user.username }}, Добавить новый пост? <a href="{% url 'posts:post_create' %}">Создать пост</a></p>
+    {% endif %}
+
+    {# Все посты #}
+    <div class="container">
+        {% for post in posts %}
+            <div class="post">
+                <h2><a href="{{ post.get_absolute_url }}">{{ post.name }}</a></h2>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="connect" style="max-height: 250px"
+                         align="left">{{ post.text }}
+                {% else %}
+                    <p>{{ post.text }}</p>
+                {% endif %}
+                <p><a href="{{ post.author.get_absolute_url }}">{{ post.author }}</a></p>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% include 'post/pagination.html' with page=posts %}
+{% endblock content %}

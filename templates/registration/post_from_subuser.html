@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form action="." method="get">
+        {% csrf_token %}
+        {{ search_form.as_p }}
+        <input type="submit" value="Поиск">
+    </form>
+    <br>
+    {% if query is True %}
+        {% for res in result %}
+            <a href="{{ res.get_absolute_url }}">{{ res.name }}</a>
+            <p>{{ res.text }} <a href="{{ res.author.get_absolute_url }}">{{ res.author }}</a></p>
+            <br>
+        {% endfor %}
+        <p></p>
+    {% elif query == False %}
+        <h3>Ничего не найдено</h3>
+    {% endif %}
+
+    {% for post in posts %}
+        <h2><a href="{{ post.get_absolute_url }}">{{ post.name }}</a></h2>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="connect" style="max-height: 250px"
+                 align="left">{{ post.text }}
+        {% else %}
+            <p>{{ post.text }}</p>
+        {% endif %}
+        <p><a href="{{ post.author.get_absolute_url }}">{{ post.author }}</a></p>
+
+    {% endfor %}
+{% endblock content %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Профиль{% endblock title %}
+{% block content %}
+    {#    {% if perms.user.administrator %}#}
+    {#        <a href="{% url 'administration:all_func' %}">Админка</a>#}
+    {#    {% endif %}#}
+    <p>{{ profile.username }}</p>
+    <p>{% if profile.image %}<img src="{{ profile.image.url }}" alt="connect" style="max-height: 300px">{% endif %}</p>
+    <p>{% if profile.gender %}Пол: {{ profile.gender }}{% endif %}</p>
+    <p>{% if profile.year %}Возраст: {{ profile.year }}{% endif %}</p>
+    <p>{% if profile.telegram %}Telegram: <a href="{{ profile.telegram }}">{{ profile.telegram }}</a>{% endif %}</p>
+    {# Редактирование #}
+    {% if request.user.username == profile.username %}
+        <p><a href="{% url 'accounts:profile_update' %}">Редактировать?</a>
+        </p>    {% endif %}
+    {# Прочая информация #}
+    <p>Подписчиков: <a
+            href="{% url 'accounts:subscribers' account_url=profile.account_url %}">{{ profile.following.count }}</a>
+    </p>
+    <p>Подписки: <a
+            href="{% url 'accounts:sub_post' account_url=profile.account_url %}">{{ profile.Подписчики.count }}</a></p>
+    {% if request.user.username == profile.username %}
+
+    {% else %}
+        {% if request.user in profile.following.all %}
+            <a href="{% url 'accounts:subscribe' account_url=profile.account_url action='unfollow' %}">Отписаться</a>
+        {% else %}
+            <a href="{% url 'accounts:subscribe' account_url=profile.account_url action='follow' %}">Подписаться</a>
+        {% endif %}
+    {% endif %}
+    {% if request.user.username == profile.username %}
+        <a href="{% url 'accounts:all_liked_post' %}">Понравившиеся посты</a>
+        <p><a href="{% url 'accounts:action_list' %}">Действия</a></p>
+        <p><a href="{% url 'accounts:post_from_subuser' %}">Посты подписок</a></p>
+    {% endif %}
+    {# Посты пользователя #}
+    {% if posts %}
+        {% if request.user.username == profile.username %}
+            <h2>Мои посты: {{ posts.count }}</h2>
+        {% else %}
+            <h2>Посты пользователя: {{ posts.count }}</h2>
+        {% endif %}
+        {% for post in posts %}
+            <p><a href="{{ post.get_absolute_url }}">{{ post.name }}</a>
+            </p>    {% endfor %}
+    {% endif %}
+{% endblock content %}

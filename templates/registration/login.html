@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Авторизация:</h1>
+    {% if messages %}
+        {% for msg in messages %}
+            <ul>
+                <li>{{ msg }}</li>
+            </ul>
+        {% endfor %}
+    {% endif %}
+    <form action="{% url 'accounts:login' %}" method="post">
+        {% csrf_token %}
+        {{ login_form.as_p }}
+        <p><input type="submit" value="Вход"></p>
+    </form>
+    <h3><a href="{% url 'accounts:reset_password' %}">Забыли пароль?</a></h3>
+{% endblock content %}

@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% load edit_filter %}
+{% block content %}
+    {% for action in actions %}
+        <p>Пользователь <a href="{{ action.user.get_absolute_url }}">{{ action.user }}</a> {{ action.verb }}
+            <a href="{{ action.target.get_absolute_url }}">{{ action.target }}</a> ({{ action.created|timesince }} назад)</p>
+    {% endfor %}
+{% endblock content %}

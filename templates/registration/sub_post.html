@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}
+    Подписки
+{% endblock title %}
+{% block content %}
+    <form action="." method="get">
+        {% csrf_token %}
+        {{ search_form.as_p }}
+        <input type="submit" value="Поиск пользователя">
+    </form>
+    <br>
+    {% if query is True %}
+        {% for res in result %}
+            <img src="{{ res.image.url }}" alt="connect" style="max-height: 300px">
+            <p><a href="{{ res.get_absolute_url }}">{{ res.username }}</a></p>
+        {% endfor %}
+        <p></p>
+    {% elif query == False %}
+        <h3>Ничего не найдено</h3>
+    {% endif %}
+
+
+    {% if not user_sub and request.user.username == user.username %}
+        <h2>Подпишитесь на пользователей, чтобы отслеживать их.</h2>
+    {% elif not user_sub %}
+        <h2>Пользователь не имеет подписок.</h2>
+    {% else %}
+        <h2>Подписки:</h2>
+        <br>
+        {% for sub in user_sub %}
+            <img src="{{ sub.image.url }}" alt="connect" style="max-height: 300px">
+            <p><a href="{{ sub.get_absolute_url }}">{{ sub.username }}</a>: <a
+                    {% if request.user.username == user.username %}href="{% url 'accounts:subscribe' account_url=sub.account_url action="unfollow" redirec='user_sub' %}"
+                        > Отписаться</a>{% endif %}
+            </p>
+        {% endfor %}
+    {% endif %}
+{% endblock content %}

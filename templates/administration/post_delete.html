@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}Админка
+{% endblock title %}
+{% block content %}
+    <h1>Вы точно хотите удалить пост?</h1>
+    <a href="{% url 'administration:decision' pk=pk slug=slug action='delete_true' %}">Удалить</a>
+    <a href="{% url 'administration:decision' pk=pk slug=slug action='delete_false' %}">Отмена</a>
+{% endblock content %}
