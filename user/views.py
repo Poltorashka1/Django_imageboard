@@ -241,6 +241,10 @@ def check(request):
     pass
 
 
+
+
+
+
 # def forgot_password(request):
 #     """Views для восстановления забытого пароля"""
 #     if request.method == "POST":
